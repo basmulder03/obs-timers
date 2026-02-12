@@ -1,16 +1,21 @@
 import { formatDuration } from "../core/format.js";
 import { createTimerEngine } from "../core/time-engine.js";
 import { parseTimerConfig } from "../core/url-config.js";
-import { applyOverlayTheme, bindCommandListener, setText } from "./overlay-common.js";
+import { applyOverlayTheme, bindCommandListener, createTimeRenderer, setText } from "./overlay-common.js";
 
 const config = parseTimerConfig("stopwatch");
 applyOverlayTheme(config);
 setText("label", "Stopwatch");
+const renderer = createTimeRenderer(config);
 
 const engine = createTimerEngine({ initialElapsedMs: 0 });
 
 engine.subscribe((elapsedMs) => {
-  setText("time", formatDuration(elapsedMs, { showMs: config.showMs, forceHours: true }));
+  renderer.render({
+    text: formatDuration(elapsedMs, { showMs: config.showMs, forceHours: true }),
+    progress: (elapsedMs % 60000) / 60000,
+    running: engine.isRunning()
+  });
 });
 
 bindCommandListener(config, {

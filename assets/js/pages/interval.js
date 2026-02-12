@@ -1,10 +1,11 @@
 import { formatDuration } from "../core/format.js";
 import { createTimerEngine } from "../core/time-engine.js";
 import { parseTimerConfig } from "../core/url-config.js";
-import { applyOverlayTheme, bindCommandListener, setText } from "./overlay-common.js";
+import { applyOverlayTheme, bindCommandListener, createTimeRenderer, setText } from "./overlay-common.js";
 
 const config = parseTimerConfig("interval");
 applyOverlayTheme(config);
+const renderer = createTimeRenderer(config);
 
 const phases = [];
 for (let round = 1; round <= config.rounds; round += 1) {
@@ -26,7 +27,7 @@ function setPhaseUi() {
   if (complete) {
     setText("label", "Complete");
     setText("round", `Finished ${config.rounds} rounds`);
-    setText("time", formatDuration(0, { showMs: config.showMs }));
+    renderer.render({ text: formatDuration(0, { showMs: config.showMs }), progress: 1, running: false });
     return;
   }
 
@@ -60,7 +61,11 @@ engine.subscribe((elapsedMs) => {
 
   if (elapsedMs < phaseMs) {
     const remaining = phaseMs - elapsedMs;
-    setText("time", formatDuration(remaining, { showMs: config.showMs, forceHours: phaseMs >= 3600000 }));
+    renderer.render({
+      text: formatDuration(remaining, { showMs: config.showMs, forceHours: phaseMs >= 3600000 }),
+      progress: phaseMs === 0 ? 0 : elapsedMs / phaseMs,
+      running: engine.isRunning()
+    });
     setPhaseUi();
     return;
   }

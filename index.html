@@ -67,6 +67,83 @@
 
           <div class="field-row">
             <label class="field">
+              Renderer
+              <select name="renderer">
+                <option value="classic">Classic</option>
+                <option value="seven">Seven Segment</option>
+                <option value="flip">Flip Cards</option>
+                <option value="ring">Analog Ring</option>
+                <option value="splitflap">Split-Flap</option>
+              </select>
+            </label>
+            <label class="field">
+              Animations
+              <select name="anim">
+                <option value="1">On</option>
+                <option value="0">Off</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="field-row">
+            <label class="field">
+              Motion Intensity
+              <select name="motion">
+                <option value="low">Low</option>
+                <option value="normal">Normal</option>
+                <option value="high">High</option>
+              </select>
+            </label>
+          </div>
+
+          <div id="renderer-seven" class="field-row" hidden>
+            <label class="field">
+              Segment Glow
+              <select name="segmentGlow">
+                <option value="1">On</option>
+                <option value="0">Off</option>
+              </select>
+            </label>
+          </div>
+
+          <div id="renderer-flip" class="field-row" hidden>
+            <label class="field">
+              Flip Speed
+              <select name="flipSpeed">
+                <option value="slow">Slow</option>
+                <option value="normal">Normal</option>
+                <option value="fast">Fast</option>
+              </select>
+            </label>
+          </div>
+
+          <div id="renderer-ring" class="field-row" hidden>
+            <label class="field">
+              Ring Thickness
+              <input name="ringThickness" type="number" min="4" max="32" step="1" />
+            </label>
+            <label class="field">
+              Ring Ticks
+              <select name="ringTicks">
+                <option value="0">Off</option>
+                <option value="1">On</option>
+              </select>
+            </label>
+          </div>
+
+          <div id="renderer-splitflap" class="field-row" hidden>
+            <label class="field">
+              Flap Speed
+              <select name="flapSpeed">
+                <option value="slow">Slow</option>
+                <option value="normal">Normal</option>
+                <option value="fast">Fast</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="field-row">
+            <label class="field">
               Font
               <input name="font" type="text" />
             </label>

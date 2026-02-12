@@ -15,6 +15,13 @@ const sections = {
   interval: document.getElementById("type-interval")
 };
 
+const rendererSections = {
+  seven: document.getElementById("renderer-seven"),
+  flip: document.getElementById("renderer-flip"),
+  ring: document.getElementById("renderer-ring"),
+  splitflap: document.getElementById("renderer-splitflap")
+};
+
 const initialState = {
   type: "countdown",
   target: "main",
@@ -26,6 +33,14 @@ const initialState = {
   size: 140,
   shadow: true,
   theme: "steel",
+  renderer: "classic",
+  anim: true,
+  motion: "normal",
+  segmentGlow: true,
+  flipSpeed: "normal",
+  ringThickness: 12,
+  ringTicks: false,
+  flapSpeed: "normal",
   duration: 300,
   endMode: "stop",
   start: 0,
@@ -95,6 +110,7 @@ document.getElementById("delete-preset").addEventListener("click", () => {
 function render() {
   const state = readForm();
   setSectionVisibility(state.type);
+  setRendererSectionVisibility(state.renderer);
 
   const basePath = window.location.pathname.replace(/index\.html$/, "").replace(/\/$/, "");
   const timerUrl = new URL(buildTimerUrl(state.type, state, basePath), window.location.origin).toString();
@@ -125,6 +141,16 @@ function setSectionVisibility(type) {
   }
 }
 
+function setRendererSectionVisibility(renderer) {
+  Object.values(rendererSections).forEach((section) => {
+    section.hidden = true;
+  });
+
+  if (rendererSections[renderer]) {
+    rendererSections[renderer].hidden = false;
+  }
+}
+
 function readForm() {
   const data = new FormData(form);
   return {
@@ -138,6 +164,14 @@ function readForm() {
     size: Number(data.get("size")),
     shadow: data.get("shadow") === "1",
     theme: data.get("theme"),
+    renderer: data.get("renderer"),
+    anim: data.get("anim") === "1",
+    motion: data.get("motion"),
+    segmentGlow: data.get("segmentGlow") === "1",
+    flipSpeed: data.get("flipSpeed"),
+    ringThickness: Number(data.get("ringThickness")),
+    ringTicks: data.get("ringTicks") === "1",
+    flapSpeed: data.get("flapSpeed"),
     duration: Number(data.get("duration")),
     endMode: data.get("endMode"),
     start: Number(data.get("start")),
@@ -158,12 +192,19 @@ function hydrateForm(state) {
     }
 
     if (field instanceof RadioNodeList) {
-      field.value = String(value);
+      field.value = normalizeValue(value);
       continue;
     }
 
-    field.value = String(value);
+    field.value = normalizeValue(value);
   }
+}
+
+function normalizeValue(value) {
+  if (typeof value === "boolean") {
+    return value ? "1" : "0";
+  }
+  return String(value);
 }
 
 function refreshPresetList() {

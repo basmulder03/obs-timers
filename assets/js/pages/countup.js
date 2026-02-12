@@ -1,17 +1,23 @@
 import { formatDuration } from "../core/format.js";
 import { createTimerEngine } from "../core/time-engine.js";
 import { parseTimerConfig } from "../core/url-config.js";
-import { applyOverlayTheme, bindCommandListener, setText } from "./overlay-common.js";
+import { applyOverlayTheme, bindCommandListener, createTimeRenderer, setText } from "./overlay-common.js";
 
 const config = parseTimerConfig("countup");
 applyOverlayTheme(config);
 setText("label", "Count Up");
+const renderer = createTimeRenderer(config);
 
 const baseMs = config.start * 1000;
 const engine = createTimerEngine({ initialElapsedMs: 0 });
 
 engine.subscribe((elapsedMs) => {
-  setText("time", formatDuration(baseMs + elapsedMs, { showMs: config.showMs, forceHours: true }));
+  const total = baseMs + elapsedMs;
+  renderer.render({
+    text: formatDuration(total, { showMs: config.showMs, forceHours: true }),
+    progress: (total % 60000) / 60000,
+    running: engine.isRunning()
+  });
 });
 
 bindCommandListener(config, {

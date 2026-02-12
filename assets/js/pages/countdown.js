@@ -1,11 +1,12 @@
 import { formatDuration } from "../core/format.js";
 import { createTimerEngine } from "../core/time-engine.js";
 import { parseTimerConfig } from "../core/url-config.js";
-import { applyOverlayTheme, bindCommandListener, setText } from "./overlay-common.js";
+import { applyOverlayTheme, bindCommandListener, createTimeRenderer, setText } from "./overlay-common.js";
 
 const config = parseTimerConfig("countdown");
 applyOverlayTheme(config);
 setText("label", "Countdown");
+const renderer = createTimeRenderer(config);
 
 const durationMs = config.duration * 1000;
 const engine = createTimerEngine({ initialElapsedMs: 0 });
@@ -14,7 +15,11 @@ let ended = false;
 engine.subscribe((elapsedMs) => {
   if (elapsedMs < durationMs) {
     const remaining = durationMs - elapsedMs;
-    setText("time", formatDuration(remaining, { showMs: config.showMs, forceHours: durationMs >= 3600000 }));
+    renderer.render({
+      text: formatDuration(remaining, { showMs: config.showMs, forceHours: durationMs >= 3600000 }),
+      progress: durationMs === 0 ? 0 : elapsedMs / durationMs,
+      running: engine.isRunning()
+    });
     return;
   }
 
@@ -38,9 +43,17 @@ engine.subscribe((elapsedMs) => {
 
   if (config.endMode === "overtime") {
     const overtime = elapsedMs - durationMs;
-    setText("time", `+${formatDuration(overtime, { showMs: config.showMs, forceHours: durationMs >= 3600000 })}`);
+    renderer.render({
+      text: `+${formatDuration(overtime, { showMs: config.showMs, forceHours: durationMs >= 3600000 })}`,
+      progress: 1,
+      running: engine.isRunning()
+    });
   } else {
-    setText("time", formatDuration(0, { showMs: config.showMs, forceHours: durationMs >= 3600000 }));
+    renderer.render({
+      text: formatDuration(0, { showMs: config.showMs, forceHours: durationMs >= 3600000 }),
+      progress: 1,
+      running: engine.isRunning()
+    });
   }
 });
 

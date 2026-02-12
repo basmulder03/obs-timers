@@ -9,7 +9,15 @@ const COMMON_DEFAULTS = {
   bg: "transparent",
   size: 120,
   shadow: true,
-  theme: "steel"
+  theme: "steel",
+  renderer: "classic",
+  anim: true,
+  motion: "normal",
+  segmentGlow: true,
+  flipSpeed: "normal",
+  ringThickness: 12,
+  ringTicks: false,
+  flapSpeed: "normal"
 };
 
 const TYPE_DEFAULTS = {
@@ -43,7 +51,15 @@ export function parseTimerConfig(type, search = window.location.search) {
     bg: parseEnum(params.get("bg"), ["transparent", "solid"], COMMON_DEFAULTS.bg),
     size: parseNumber(params.get("size"), COMMON_DEFAULTS.size, 36, 260),
     shadow: parseBool(params.get("shadow"), COMMON_DEFAULTS.shadow),
-    theme: parseEnum(params.get("theme"), ["steel", "amber", "ice"], COMMON_DEFAULTS.theme)
+    theme: parseEnum(params.get("theme"), ["steel", "amber", "ice"], COMMON_DEFAULTS.theme),
+    renderer: parseEnum(params.get("renderer"), ["classic", "seven", "flip", "ring", "splitflap"], COMMON_DEFAULTS.renderer),
+    anim: parseBool(params.get("anim"), COMMON_DEFAULTS.anim),
+    motion: parseEnum(params.get("motion"), ["low", "normal", "high"], COMMON_DEFAULTS.motion),
+    segmentGlow: parseBool(params.get("segmentGlow"), COMMON_DEFAULTS.segmentGlow),
+    flipSpeed: parseEnum(params.get("flipSpeed"), ["slow", "normal", "fast"], COMMON_DEFAULTS.flipSpeed),
+    ringThickness: parseNumber(params.get("ringThickness"), COMMON_DEFAULTS.ringThickness, 4, 32),
+    ringTicks: parseBool(params.get("ringTicks"), COMMON_DEFAULTS.ringTicks),
+    flapSpeed: parseEnum(params.get("flapSpeed"), ["slow", "normal", "fast"], COMMON_DEFAULTS.flapSpeed)
   };
 
   if (timerType === "countdown") {
@@ -127,6 +143,14 @@ function setCommonParams(params, config) {
   params.set("size", String(parseNumber(config.size, COMMON_DEFAULTS.size, 36, 260)));
   params.set("shadow", boolString(parseBool(config.shadow, COMMON_DEFAULTS.shadow)));
   params.set("theme", parseEnum(config.theme, ["steel", "amber", "ice"], COMMON_DEFAULTS.theme));
+  params.set("renderer", parseEnum(config.renderer, ["classic", "seven", "flip", "ring", "splitflap"], COMMON_DEFAULTS.renderer));
+  params.set("anim", boolString(parseBool(config.anim, COMMON_DEFAULTS.anim)));
+  params.set("motion", parseEnum(config.motion, ["low", "normal", "high"], COMMON_DEFAULTS.motion));
+  params.set("segmentGlow", boolString(parseBool(config.segmentGlow, COMMON_DEFAULTS.segmentGlow)));
+  params.set("flipSpeed", parseEnum(config.flipSpeed, ["slow", "normal", "fast"], COMMON_DEFAULTS.flipSpeed));
+  params.set("ringThickness", String(parseNumber(config.ringThickness, COMMON_DEFAULTS.ringThickness, 4, 32)));
+  params.set("ringTicks", boolString(parseBool(config.ringTicks, COMMON_DEFAULTS.ringTicks)));
+  params.set("flapSpeed", parseEnum(config.flapSpeed, ["slow", "normal", "fast"], COMMON_DEFAULTS.flapSpeed));
 }
 
 function parseString(value, fallback) {

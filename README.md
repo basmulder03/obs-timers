@@ -13,6 +13,7 @@ Use the dashboard to generate scene-ready URLs for multiple timer styles, save p
 - URL-based customization (one URL per scene setup)
 - Preset save/load/delete in browser `localStorage`
 - Optional control bridge for `start`, `pause`, `reset`, and `toggle`
+- Multiple renderers: `classic`, `seven`, `flip`, `ring`, `splitflap`
 
 ## Project structure
 
@@ -28,13 +29,21 @@ Use the dashboard to generate scene-ready URLs for multiple timer styles, save p
 |- assets/
 |  |- css/
 |  |  |- base.css
-|  |  \- themes.css
+|  |  |- themes.css
+|  |  \- renderers.css
 |  \- js/
 |     |- core/
 |     |  |- format.js
 |     |  |- storage.js
 |     |  |- time-engine.js
 |     |  \- url-config.js
+|     |- renderers/
+|     |  |- index.js
+|     |  |- classic.js
+|     |  |- seven.js
+|     |  |- flip.js
+|     |  |- ring.js
+|     |  \- splitflap.js
 |     \- pages/
 |        |- dashboard.js
 |        |- overlay-common.js
@@ -104,6 +113,30 @@ Interval:
 https://<username>.github.io/obs-timers/timers/interval.html?work=1500&rest=300&rounds=4&finalMode=stop&target=focus
 ```
 
+Seven segment countdown:
+
+```text
+https://<username>.github.io/obs-timers/timers/countdown.html?duration=300&renderer=seven&segmentGlow=1&target=main
+```
+
+Flip-card stopwatch:
+
+```text
+https://<username>.github.io/obs-timers/timers/stopwatch.html?renderer=flip&flipSpeed=normal&showMs=0&target=speedrun
+```
+
+Analog ring count-up:
+
+```text
+https://<username>.github.io/obs-timers/timers/countup.html?renderer=ring&ringThickness=14&ringTicks=1&target=warmup
+```
+
+Split-flap countdown:
+
+```text
+https://<username>.github.io/obs-timers/timers/countdown.html?duration=90&renderer=splitflap&flapSpeed=normal&target=main
+```
+
 ## Command bridge (optional)
 
 `timers/control.html` can send runtime commands to overlays sharing the same origin and `target`.
@@ -133,6 +166,14 @@ Common (all timer overlays):
 - `size` (font size in px)
 - `shadow=0|1`
 - `theme=steel|amber|ice`
+- `renderer=classic|seven|flip|ring|splitflap`
+- `anim=0|1`
+- `motion=low|normal|high`
+- `segmentGlow=0|1` (used by `seven`)
+- `flipSpeed=slow|normal|fast` (used by `flip`)
+- `ringThickness=4..32` (used by `ring`)
+- `ringTicks=0|1` (used by `ring`)
+- `flapSpeed=slow|normal|fast` (used by `splitflap`)
 
 Countdown:
 
