@@ -1,80 +1,158 @@
 # OBS Timers
 
-Native HTML/CSS/JS timer overlays for OBS, hosted on GitHub Pages.
+Custom HTML/CSS/JS timers for OBS Browser Source, designed to be hosted on GitHub Pages.
 
-## Features
+Use the dashboard to generate scene-ready URLs for multiple timer styles, save presets, and optionally trigger timer commands from a separate control URL.
 
-- Countdown, stopwatch, count-up, and interval timers
-- Query-parameter based configuration for scene-specific URLs
-- Dashboard to generate URLs and manage presets
-- Browser `localStorage` preset persistence
-- Optional command bridge page for start/pause/reset/toggle
+## What you get
 
-## Run locally
+- Countdown timer
+- Stopwatch
+- Count-up timer
+- Interval timer (work/rest/rounds)
+- URL-based customization (one URL per scene setup)
+- Preset save/load/delete in browser `localStorage`
+- Optional control bridge for `start`, `pause`, `reset`, and `toggle`
 
-Because this project uses ES modules, run it with a local web server.
+## Project structure
 
-Example with Python:
+```text
+.
+|- index.html                     # Dashboard (URL builder + preview + presets)
+|- timers/
+|  |- countdown.html
+|  |- stopwatch.html
+|  |- countup.html
+|  |- interval.html
+|  \- control.html               # Optional command bridge
+|- assets/
+|  |- css/
+|  |  |- base.css
+|  |  \- themes.css
+|  \- js/
+|     |- core/
+|     |  |- format.js
+|     |  |- storage.js
+|     |  |- time-engine.js
+|     |  \- url-config.js
+|     \- pages/
+|        |- dashboard.js
+|        |- overlay-common.js
+|        |- countdown.js
+|        |- stopwatch.js
+|        |- countup.js
+|        |- interval.js
+|        \- control.js
+\- .github/workflows/deploy-pages.yml
+```
+
+## Local development
+
+This project uses ES modules, so run it behind a local web server.
 
 ```bash
 python -m http.server 8080
 ```
 
-Then open `http://localhost:8080`.
+Open `http://localhost:8080`.
 
-## GitHub Pages deploy
+## Deploy to GitHub Pages
 
-1. Push this repository to GitHub.
-2. In repository settings, open **Pages** and set **Source** to **GitHub Actions**.
-3. The workflow `.github/workflows/deploy-pages.yml` deploys automatically on pushes to `main`.
-4. Your dashboard is available at:
+1. Push your repository to GitHub.
+2. Open repository **Settings -> Pages**.
+3. Set **Source** to **GitHub Actions**.
+4. Push to `main` (or run the workflow manually).
+5. After deploy, your dashboard is available at:
    - `https://<username>.github.io/obs-timers/`
 
-## OBS usage
+This repo includes:
 
-1. Add a **Browser Source** in OBS.
-2. Paste a generated timer URL from the dashboard.
-3. Set Width/Height for your scene (for example, 1920x1080).
-4. For transparent overlays, keep `bg=transparent`.
+- `.github/workflows/deploy-pages.yml` for automatic deployment
+- `.nojekyll` for static hosting compatibility
 
-## Timer URL examples
+## Using in OBS
 
-- Countdown:
-  - `https://<username>.github.io/obs-timers/timers/countdown.html?duration=300&autostart=1&target=main`
-- Stopwatch:
-  - `https://<username>.github.io/obs-timers/timers/stopwatch.html?autostart=0&showMs=1&target=main`
-- Interval:
-  - `https://<username>.github.io/obs-timers/timers/interval.html?work=1500&rest=300&rounds=4&finalMode=stop&target=focus`
+1. In OBS, add a **Browser Source**.
+2. Paste a timer URL generated from the dashboard.
+3. Set source size (for example `1920x1080`).
+4. For alpha overlays, use `bg=transparent`.
+5. If updates do not appear immediately, refresh the Browser Source.
 
-## Command bridge
+## URL examples
 
-Control an active timer by loading `timers/control.html` with command parameters:
+Countdown:
+
+```text
+https://<username>.github.io/obs-timers/timers/countdown.html?duration=300&autostart=1&target=main
+```
+
+Stopwatch:
+
+```text
+https://<username>.github.io/obs-timers/timers/stopwatch.html?autostart=0&showMs=1&target=main
+```
+
+Count-up:
+
+```text
+https://<username>.github.io/obs-timers/timers/countup.html?start=90&autostart=1&target=warmup
+```
+
+Interval:
+
+```text
+https://<username>.github.io/obs-timers/timers/interval.html?work=1500&rest=300&rounds=4&finalMode=stop&target=focus
+```
+
+## Command bridge (optional)
+
+`timers/control.html` can send runtime commands to overlays sharing the same origin and `target`.
+
+Parameters:
 
 - `cmd=start|pause|reset|toggle`
 - `target=<timerTarget>`
-- `syncToken=<uniqueNumber>`
+- `syncToken=<uniqueValue>`
 
 Example:
 
-`https://<username>.github.io/obs-timers/timers/control.html?cmd=reset&target=main&syncToken=1739384700`
+```text
+https://<username>.github.io/obs-timers/timers/control.html?cmd=reset&target=main&syncToken=1739384700
+```
 
-The command bridge writes to `localStorage`, and timer pages listening on the same origin and matching `target` will react.
+## Query parameters
 
-## Query params
+Common (all timer overlays):
 
-Common params for all timer overlays:
-
-- `target` (default `default`)
-- `autostart=0|1` (default `0`)
-- `showMs=0|1` (default `0`)
-- `font` (default `Barlow Condensed`)
-- `color` hex like `%23FFFFFF`
+- `target` (default: `default`)
+- `autostart=0|1` (default: `0`)
+- `showMs=0|1` (default: `0`)
+- `font` (default: `Barlow Condensed`)
+- `color` (hex, for example `%23FFFFFF`)
 - `bg=transparent|solid`
-- `size` number (font size in px)
+- `size` (font size in px)
 - `shadow=0|1`
+- `theme=steel|amber|ice`
 
-Type-specific params:
+Countdown:
 
-- Countdown: `duration` (seconds), `endMode=stop|loop|overtime`
-- Count-up: `start` (seconds)
-- Interval: `work` (seconds), `rest` (seconds), `rounds`, `finalMode=stop|loop`, `autoNext=0|1`
+- `duration` (seconds)
+- `endMode=stop|loop|overtime`
+
+Count-up:
+
+- `start` (seconds)
+
+Interval:
+
+- `work` (seconds)
+- `rest` (seconds)
+- `rounds` (1-200)
+- `autoNext=0|1`
+- `finalMode=stop|loop`
+
+## Notes
+
+- Presets are stored per browser in `localStorage`.
+- Control bridge communication also uses `localStorage`; it is origin-scoped.
+- For best OBS readability, use high-contrast colors and verify at your output resolution.
