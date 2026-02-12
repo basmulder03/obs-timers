@@ -1,0 +1,20 @@
+body {
+  --text-color: #f4f8ff;
+  --accent-color: #84d3ff;
+  --shadow-color: rgba(5, 10, 20, 0.55);
+}
+
+body.theme-steel {
+  --text-color: #edf4ff;
+  --accent-color: #91d5ff;
+}
+
+body.theme-amber {
+  --text-color: #fff7e7;
+  --accent-color: #ffd08f;
+}
+
+body.theme-ice {
+  --text-color: #eefcff;
+  --accent-color: #9ef3ff;
+}

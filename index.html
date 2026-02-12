@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OBS Timers Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/css/base.css" />
+    <link rel="stylesheet" href="assets/css/themes.css" />
+  </head>
+  <body class="solid-bg theme-steel">
+    <main class="dashboard">
+      <section class="panel">
+        <h1>OBS Timers</h1>
+        <p class="muted">Build timer links for browser sources and save reusable presets.</p>
+
+        <form id="config-form">
+          <div class="field-row">
+            <label class="field">
+              Type
+              <select name="type">
+                <option value="countdown">Countdown</option>
+                <option value="stopwatch">Stopwatch</option>
+                <option value="countup">Count Up</option>
+                <option value="interval">Interval</option>
+              </select>
+            </label>
+            <label class="field">
+              Target
+              <input name="target" type="text" maxlength="30" />
+            </label>
+          </div>
+
+          <div class="field-row">
+            <label class="field">
+              Autostart
+              <select name="autostart">
+                <option value="1">On</option>
+                <option value="0">Off</option>
+              </select>
+            </label>
+            <label class="field">
+              Show Milliseconds
+              <select name="showMs">
+                <option value="0">Off</option>
+                <option value="1">On</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="field-row">
+            <label class="field">
+              Theme
+              <select name="theme">
+                <option value="steel">Steel</option>
+                <option value="amber">Amber</option>
+                <option value="ice">Ice</option>
+              </select>
+            </label>
+            <label class="field">
+              Text Color
+              <input name="color" type="color" />
+            </label>
+          </div>
+
+          <div class="field-row">
+            <label class="field">
+              Font
+              <input name="font" type="text" />
+            </label>
+            <label class="field">
+              Font Size (px)
+              <input name="size" type="number" min="36" max="260" step="1" />
+            </label>
+          </div>
+
+          <div class="field-row">
+            <label class="field">
+              Background
+              <select name="bg">
+                <option value="transparent">Transparent</option>
+                <option value="solid">Solid</option>
+              </select>
+            </label>
+            <label class="field">
+              Text Shadow
+              <select name="shadow">
+                <option value="1">On</option>
+                <option value="0">Off</option>
+              </select>
+            </label>
+          </div>
+
+          <div id="type-countdown" class="field-row">
+            <label class="field">
+              Duration (seconds)
+              <input name="duration" type="number" min="1" max="86400" step="1" />
+            </label>
+            <label class="field">
+              End Mode
+              <select name="endMode">
+                <option value="stop">Stop</option>
+                <option value="loop">Loop</option>
+                <option value="overtime">Overtime</option>
+              </select>
+            </label>
+          </div>
+
+          <div id="type-countup" class="field-row" hidden>
+            <label class="field">
+              Start Offset (seconds)
+              <input name="start" type="number" min="0" max="86400" step="1" />
+            </label>
+          </div>
+
+          <div id="type-interval" hidden>
+            <div class="field-row">
+              <label class="field">
+                Work (seconds)
+                <input name="work" type="number" min="1" max="86400" step="1" />
+              </label>
+              <label class="field">
+                Rest (seconds)
+                <input name="rest" type="number" min="0" max="86400" step="1" />
+              </label>
+            </div>
+            <div class="field-row">
+              <label class="field">
+                Rounds
+                <input name="rounds" type="number" min="1" max="200" step="1" />
+              </label>
+              <label class="field">
+                Auto Next
+                <select name="autoNext">
+                  <option value="1">On</option>
+                  <option value="0">Off</option>
+                </select>
+              </label>
+            </div>
+            <div class="field-row">
+              <label class="field">
+                Final Mode
+                <select name="finalMode">
+                  <option value="stop">Stop</option>
+                  <option value="loop">Loop</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
+          <hr />
+
+          <h3>Presets</h3>
+          <div class="field-row">
+            <label class="field">
+              Preset Name
+              <input id="preset-name" type="text" maxlength="40" />
+            </label>
+            <label class="field">
+              Saved Presets
+              <select id="preset-select"></select>
+            </label>
+          </div>
+
+          <div class="actions">
+            <button type="button" id="save-preset" class="primary">Save Preset</button>
+            <button type="button" id="load-preset">Load Preset</button>
+            <button type="button" id="delete-preset">Delete Preset</button>
+          </div>
+
+          <p id="message" class="muted"></p>
+
+          <hr />
+
+          <h3>Command URL</h3>
+          <label class="field">
+            Command Type
+            <select name="cmd">
+              <option value="toggle">Toggle</option>
+              <option value="start">Start</option>
+              <option value="pause">Pause</option>
+              <option value="reset">Reset</option>
+            </select>
+          </label>
+        </form>
+      </section>
+
+      <section class="panel preview">
+        <div>
+          <h2>Generated URLs</h2>
+
+          <label class="field">
+            Timer URL (use in OBS Browser Source)
+            <textarea id="timer-url" class="url-box" readonly></textarea>
+          </label>
+          <div class="actions">
+            <button type="button" id="copy-timer-url" class="primary">Copy Timer URL</button>
+          </div>
+
+          <label class="field">
+            Command URL (optional control trigger)
+            <textarea id="control-url" class="url-box" readonly></textarea>
+          </label>
+          <div class="actions">
+            <button type="button" id="copy-control-url">Copy Command URL</button>
+          </div>
+        </div>
+
+        <iframe id="preview-frame" title="Timer preview"></iframe>
+      </section>
+    </main>
+
+    <script type="module" src="assets/js/pages/dashboard.js"></script>
+  </body>
+</html>
