@@ -1,11 +1,12 @@
 import { formatDuration } from "../core/format.js";
 import { createTimerEngine } from "../core/time-engine.js";
 import { parseTimerConfig } from "../core/url-config.js";
-import { applyOverlayTheme, bindCommandListener, createTimeRenderer, setText } from "./overlay-common.js";
+import { applyOverlayTheme, bindCommandListener, createTimeRenderer, setInfoStrip, setText } from "./overlay-common.js";
 
 const config = parseTimerConfig("stopwatch");
 applyOverlayTheme(config);
 setText("label", "Stopwatch");
+setInfoStrip(config, `Stopwatch | ${config.target}`);
 const renderer = createTimeRenderer(config);
 
 const engine = createTimerEngine({ initialElapsedMs: 0 });

@@ -1,11 +1,12 @@
 import { formatDuration } from "../core/format.js";
 import { createTimerEngine } from "../core/time-engine.js";
 import { parseTimerConfig } from "../core/url-config.js";
-import { applyOverlayTheme, bindCommandListener, createTimeRenderer, setText } from "./overlay-common.js";
+import { applyOverlayTheme, bindCommandListener, createTimeRenderer, setInfoStrip, setText } from "./overlay-common.js";
 
 const config = parseTimerConfig("countdown");
 applyOverlayTheme(config);
 setText("label", "Countdown");
+setInfoStrip(config, `Countdown | ${config.target}`);
 const renderer = createTimeRenderer(config);
 
 const durationMs = config.duration * 1000;

@@ -1,0 +1,8 @@
+{
+  "name": "obs-timers",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build:pages": "node scripts/build-pages.mjs"
+  }
+}

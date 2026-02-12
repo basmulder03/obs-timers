@@ -1,0 +1,71 @@
+.container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 1.25rem;
+}
+
+.intro {
+  margin-bottom: 1rem;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.9rem;
+}
+
+.card {
+  background: rgba(14, 22, 40, 0.72);
+  border: 1px solid rgba(177, 208, 255, 0.2);
+  border-radius: 14px;
+  padding: 0.9rem;
+}
+
+.card h3 {
+  margin: 0 0 0.4rem;
+}
+
+.card-warning {
+  border-color: rgba(255, 193, 125, 0.45);
+  background: rgba(46, 29, 13, 0.45);
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+}
+
+.tag {
+  border-radius: 999px;
+  border: 1px solid rgba(171, 213, 255, 0.45);
+  background: rgba(12, 18, 32, 0.75);
+  padding: 0.1rem 0.5rem;
+  font-size: 0.85rem;
+}
+
+.doc {
+  background: rgba(14, 22, 40, 0.72);
+  border: 1px solid rgba(177, 208, 255, 0.2);
+  border-radius: 14px;
+  padding: 1.1rem;
+}
+
+.doc h1,
+.doc h2,
+.doc h3 {
+  margin-top: 0.2rem;
+}
+
+.doc pre {
+  overflow: auto;
+  background: rgba(8, 13, 23, 0.75);
+  border: 1px solid rgba(177, 208, 255, 0.2);
+  border-radius: 10px;
+  padding: 0.7rem;
+}
+
+.doc code {
+  font-family: "Consolas", "Courier New", monospace;
+}

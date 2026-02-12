@@ -7,6 +7,7 @@ const controlUrlOutput = document.getElementById("control-url");
 const previewFrame = document.getElementById("preview-frame");
 const presetSelect = document.getElementById("preset-select");
 const presetNameInput = document.getElementById("preset-name");
+const jsonInput = document.getElementById("config-json");
 const messageEl = document.getElementById("message");
 
 const sections = {
@@ -41,6 +42,10 @@ const initialState = {
   ringThickness: 12,
   ringTicks: false,
   flapSpeed: "normal",
+  showInfo: false,
+  infoText: "",
+  infoPosition: "tr",
+  infoStyle: "chip",
   duration: 300,
   endMode: "stop",
   start: 0,
@@ -56,14 +61,12 @@ hydrateForm(initialState);
 refreshPresetList();
 render();
 
-form.addEventListener("input", () => {
-  render();
-});
+form.addEventListener("input", render);
 
-document.getElementById("copy-timer-url").addEventListener("click", () => copyText(timerUrlOutput.value));
-document.getElementById("copy-control-url").addEventListener("click", () => copyText(controlUrlOutput.value));
+bind("copy-timer-url", () => copyText(timerUrlOutput.value));
+bind("copy-control-url", () => copyText(controlUrlOutput.value));
 
-document.getElementById("save-preset").addEventListener("click", () => {
+bind("save-preset", () => {
   const state = readForm();
   const presetName = String(presetNameInput.value || "").trim();
   if (!presetName) {
@@ -77,7 +80,7 @@ document.getElementById("save-preset").addEventListener("click", () => {
   setMessage(`Saved preset \"${presetName}\".`);
 });
 
-document.getElementById("load-preset").addEventListener("click", () => {
+bind("load-preset", () => {
   const selected = presetSelect.value;
   if (!selected) {
     setMessage("Select a preset first.");
@@ -95,7 +98,7 @@ document.getElementById("load-preset").addEventListener("click", () => {
   setMessage(`Loaded preset \"${selected}\".`);
 });
 
-document.getElementById("delete-preset").addEventListener("click", () => {
+bind("delete-preset", () => {
   const selected = presetSelect.value;
   if (!selected) {
     setMessage("Select a preset to delete.");
@@ -105,6 +108,58 @@ document.getElementById("delete-preset").addEventListener("click", () => {
   deletePreset(selected);
   refreshPresetList();
   setMessage(`Deleted preset \"${selected}\".`);
+});
+
+bind("export-config", () => {
+  const state = readForm();
+  jsonInput.value = JSON.stringify(state, null, 2);
+  setMessage("Exported current config JSON.");
+});
+
+bind("copy-config-json", () => {
+  const state = readForm();
+  const json = JSON.stringify(state, null, 2);
+  jsonInput.value = json;
+  copyText(json);
+});
+
+bind("import-config", () => {
+  const input = String(jsonInput.value || "").trim();
+  if (!input) {
+    setMessage("Paste config JSON or a timer URL first.");
+    return;
+  }
+
+  if (input.startsWith("http://") || input.startsWith("https://") || input.includes("timers/")) {
+    importFromUrl(input);
+    return;
+  }
+
+  try {
+    const parsed = JSON.parse(input);
+    hydrateForm({ ...initialState, ...parsed });
+    render();
+    setMessage("Imported JSON config.");
+  } catch {
+    setMessage("Could not parse config JSON.");
+  }
+});
+
+bind("copy-share-template", () => {
+  const state = readForm();
+  const payload = {
+    fileName: "my-preset.json",
+    id: `preset-${Date.now()}`,
+    title: "My Preset",
+    author: "your-github-handle",
+    description: "Add a short description.",
+    timerType: state.type,
+    url: timerUrlOutput.value,
+    tags: [state.renderer, state.type],
+    createdAt: new Date().toISOString()
+  };
+  jsonInput.value = JSON.stringify(payload, null, 2);
+  copyText(jsonInput.value);
 });
 
 function render() {
@@ -129,6 +184,46 @@ function render() {
   timerUrlOutput.value = timerUrl;
   controlUrlOutput.value = controlUrl;
   previewFrame.src = timerUrl;
+}
+
+function importFromUrl(raw) {
+  try {
+    const url = raw.startsWith("http") ? new URL(raw) : new URL(raw, window.location.origin);
+    const params = url.searchParams;
+    const state = { ...initialState };
+
+    for (const [key, value] of params.entries()) {
+      if (!(key in state)) {
+        continue;
+      }
+      state[key] = coerceValue(state[key], value);
+    }
+
+    if (url.pathname.includes("/timers/")) {
+      const match = url.pathname.match(/\/timers\/(\w+)\.html$/);
+      if (match) {
+        state.type = match[1];
+      }
+    }
+
+    hydrateForm(state);
+    render();
+    setMessage("Imported settings from URL.");
+  } catch {
+    setMessage("Could not parse URL.");
+  }
+}
+
+function coerceValue(template, value) {
+  if (typeof template === "boolean") {
+    const safe = String(value).toLowerCase();
+    return safe === "1" || safe === "true" || safe === "on";
+  }
+  if (typeof template === "number") {
+    const num = Number(value);
+    return Number.isFinite(num) ? num : template;
+  }
+  return value;
 }
 
 function setSectionVisibility(type) {
@@ -172,6 +267,10 @@ function readForm() {
     ringThickness: Number(data.get("ringThickness")),
     ringTicks: data.get("ringTicks") === "1",
     flapSpeed: data.get("flapSpeed"),
+    showInfo: data.get("showInfo") === "1",
+    infoText: data.get("infoText"),
+    infoPosition: data.get("infoPosition"),
+    infoStyle: data.get("infoStyle"),
     duration: Number(data.get("duration")),
     endMode: data.get("endMode"),
     start: Number(data.get("start")),
@@ -225,6 +324,13 @@ function refreshPresetList() {
   });
 
   presetSelect.value = current;
+}
+
+function bind(id, callback) {
+  const element = document.getElementById(id);
+  if (element) {
+    element.addEventListener("click", callback);
+  }
 }
 
 async function copyText(value) {

@@ -17,7 +17,11 @@ const COMMON_DEFAULTS = {
   flipSpeed: "normal",
   ringThickness: 12,
   ringTicks: false,
-  flapSpeed: "normal"
+  flapSpeed: "normal",
+  showInfo: false,
+  infoText: "",
+  infoPosition: "tr",
+  infoStyle: "chip"
 };
 
 const TYPE_DEFAULTS = {
@@ -59,7 +63,11 @@ export function parseTimerConfig(type, search = window.location.search) {
     flipSpeed: parseEnum(params.get("flipSpeed"), ["slow", "normal", "fast"], COMMON_DEFAULTS.flipSpeed),
     ringThickness: parseNumber(params.get("ringThickness"), COMMON_DEFAULTS.ringThickness, 4, 32),
     ringTicks: parseBool(params.get("ringTicks"), COMMON_DEFAULTS.ringTicks),
-    flapSpeed: parseEnum(params.get("flapSpeed"), ["slow", "normal", "fast"], COMMON_DEFAULTS.flapSpeed)
+    flapSpeed: parseEnum(params.get("flapSpeed"), ["slow", "normal", "fast"], COMMON_DEFAULTS.flapSpeed),
+    showInfo: parseBool(params.get("showInfo"), COMMON_DEFAULTS.showInfo),
+    infoText: parseString(params.get("infoText"), COMMON_DEFAULTS.infoText),
+    infoPosition: parseEnum(params.get("infoPosition"), ["tl", "tr", "bl", "br"], COMMON_DEFAULTS.infoPosition),
+    infoStyle: parseEnum(params.get("infoStyle"), ["minimal", "chip"], COMMON_DEFAULTS.infoStyle)
   };
 
   if (timerType === "countdown") {
@@ -151,6 +159,10 @@ function setCommonParams(params, config) {
   params.set("ringThickness", String(parseNumber(config.ringThickness, COMMON_DEFAULTS.ringThickness, 4, 32)));
   params.set("ringTicks", boolString(parseBool(config.ringTicks, COMMON_DEFAULTS.ringTicks)));
   params.set("flapSpeed", parseEnum(config.flapSpeed, ["slow", "normal", "fast"], COMMON_DEFAULTS.flapSpeed));
+  params.set("showInfo", boolString(parseBool(config.showInfo, COMMON_DEFAULTS.showInfo)));
+  params.set("infoText", parseString(config.infoText, COMMON_DEFAULTS.infoText));
+  params.set("infoPosition", parseEnum(config.infoPosition, ["tl", "tr", "bl", "br"], COMMON_DEFAULTS.infoPosition));
+  params.set("infoStyle", parseEnum(config.infoStyle, ["minimal", "chip"], COMMON_DEFAULTS.infoStyle));
 }
 
 function parseString(value, fallback) {

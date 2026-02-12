@@ -25,6 +25,34 @@ body {
   color: var(--text-color);
 }
 
+.site-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem 0;
+}
+
+.site-nav .links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.site-nav a {
+  color: var(--text-color);
+  text-decoration: none;
+  border: 1px solid rgba(167, 196, 235, 0.35);
+  border-radius: 999px;
+  padding: 0.28rem 0.8rem;
+  background: rgba(12, 18, 32, 0.65);
+}
+
+.site-nav a.active {
+  border-color: rgba(172, 216, 255, 0.75);
+}
+
 body.solid-bg {
   background:
     radial-gradient(circle at 20% 20%, rgba(72, 130, 199, 0.35), transparent 45%),
@@ -129,6 +157,12 @@ button.primary {
   background: rgba(8, 12, 22, 0.55);
 }
 
+.json-box {
+  width: 100%;
+  min-height: 120px;
+  font-family: "Consolas", "Courier New", monospace;
+}
+
 .overlay-root {
   width: 100%;
   height: 100vh;
@@ -141,6 +175,46 @@ button.primary {
   display: grid;
   justify-items: center;
   gap: 0.35rem;
+}
+
+.overlay-info {
+  position: fixed;
+  font-size: 18px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.overlay-info.chip {
+  background: rgba(6, 11, 20, 0.62);
+  border: 1px solid rgba(157, 191, 229, 0.35);
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+}
+
+.overlay-info.minimal {
+  color: rgba(237, 245, 255, 0.88);
+}
+
+.overlay-info.tl {
+  top: 14px;
+  left: 16px;
+}
+
+.overlay-info.tr {
+  top: 14px;
+  right: 16px;
+}
+
+.overlay-info.bl {
+  bottom: 14px;
+  left: 16px;
+}
+
+.overlay-info.br {
+  bottom: 14px;
+  right: 16px;
 }
 
 .time-text {

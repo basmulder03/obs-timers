@@ -12,8 +12,11 @@ Use the dashboard to generate scene-ready URLs for multiple timer styles, save p
 - Interval timer (work/rest/rounds)
 - URL-based customization (one URL per scene setup)
 - Preset save/load/delete in browser `localStorage`
+- Import/export settings as JSON or from timer URLs
 - Optional control bridge for `start`, `pause`, `reset`, and `toggle`
 - Multiple renderers: `classic`, `seven`, `flip`, `ring`, `splitflap`
+- Documentation site generated from markdown (`docs-src/*.md` -> `docs/*.html`)
+- Community gallery sourced from `data/shared/index.json` + `data/shared/*.json`
 
 ## Project structure
 
@@ -64,6 +67,12 @@ python -m http.server 8080
 ```
 
 Open `http://localhost:8080`.
+
+Build docs pages from markdown:
+
+```bash
+npm run build:pages
+```
 
 ## Deploy to GitHub Pages
 
@@ -174,6 +183,10 @@ Common (all timer overlays):
 - `ringThickness=4..32` (used by `ring`)
 - `ringTicks=0|1` (used by `ring`)
 - `flapSpeed=slow|normal|fast` (used by `splitflap`)
+- `showInfo=0|1`
+- `infoText` (optional custom label in overlay)
+- `infoPosition=tl|tr|bl|br`
+- `infoStyle=minimal|chip`
 
 Countdown:
 
@@ -197,3 +210,4 @@ Interval:
 - Presets are stored per browser in `localStorage`.
 - Control bridge communication also uses `localStorage`; it is origin-scoped.
 - For best OBS readability, use high-contrast colors and verify at your output resolution.
+- Community sharing is repo-backed; submit new presets by adding a `data/shared/<name>.json` file and listing it in `data/shared/index.json`.

@@ -63,6 +63,18 @@ export function createTimeRenderer(config) {
   };
 }
 
+export function setInfoStrip(config, fallbackText) {
+  if (!config.showInfo) {
+    return;
+  }
+
+  const element = document.createElement("div");
+  element.className = `overlay-info ${config.infoPosition || "tr"} ${config.infoStyle || "chip"}`;
+  const text = String(config.infoText || "").trim() || fallbackText;
+  element.textContent = text;
+  document.body.append(element);
+}
+
 function readMotionFactor(value) {
   if (value === "low") {
     return "0.75";

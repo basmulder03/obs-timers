@@ -1,0 +1,10 @@
+{
+  "id": "speedrun-flip",
+  "title": "Speedrun Stopwatch",
+  "author": "obs-timers",
+  "description": "Flip-card stopwatch with clean overlay info strip.",
+  "timerType": "stopwatch",
+  "url": "../timers/stopwatch.html?autostart=1&renderer=flip&flipSpeed=normal&target=speedrun&showInfo=1&infoText=Speedrun",
+  "tags": ["stopwatch", "flip", "speedrun"],
+  "createdAt": "2026-02-12T09:00:00Z"
+}
