@@ -1,0 +1,10 @@
+{
+  "id": "countdown-seven-main",
+  "title": "Starting Soon 5m",
+  "author": "obs-timers",
+  "description": "Five-minute seven-segment countdown for starting scenes.",
+  "timerType": "countdown",
+  "url": "/overlay/countdown?duration=300&autostart=1&renderer=seven&segmentGlow=1&target=main&showInfo=1&infoText=Starting%20Soon",
+  "tags": ["countdown", "seven", "starting-soon"],
+  "createdAt": "2026-02-12T09:00:00Z"
+}
