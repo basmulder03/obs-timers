@@ -64,6 +64,76 @@
   min-height: 180px;
   border-radius: 10px;
   border: 1px solid rgba(167, 196, 235, 0.35);
-  background: rgba(8, 12, 22, 0.55);
   margin-top: 0.75rem;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 0.28rem;
+  padding: 0.9rem;
+  position: relative;
+  overflow: hidden;
+  --text-color: var(--preview-text-color, var(--text-color));
+  --accent-color: #7fc9ff;
+  color: var(--preview-text-color, var(--text-color));
+  font-family: var(--preview-font-family, var(--font-family));
+}
+
+.previewSolidBg {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(72, 130, 199, 0.35), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(57, 83, 146, 0.35), transparent 42%),
+    linear-gradient(145deg, #070c17, #0e1525);
+}
+
+.previewTransparentBg {
+  background: linear-gradient(145deg, rgba(7, 12, 23, 0.2), rgba(14, 21, 37, 0.4));
+}
+
+.themeAmber {
+  --accent-color: #ffd08f;
+  --text-color: #fff7e7;
+}
+
+.themeIce {
+  --accent-color: #9ef3ff;
+  --text-color: #eefcff;
+}
+
+.previewText {
+  line-height: 1;
+  letter-spacing: 0.03em;
+  color: var(--preview-text-color, var(--text-color));
+  text-shadow: var(--preview-shadow, none);
+}
+
+.previewLabel {
+  font-size: clamp(12px, 1.3vw, 22px);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-color);
+}
+
+.previewRound {
+  font-size: clamp(11px, 1.1vw, 16px);
+  letter-spacing: 0.1em;
+  color: rgba(214, 228, 255, 0.88);
+}
+
+.previewInfo {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.minimal {
+  color: rgba(237, 245, 255, 0.88);
+}
+
+.chip {
+  background: rgba(6, 11, 20, 0.62);
+  border: 1px solid rgba(157, 191, 229, 0.35);
+  border-radius: 999px;
+  padding: 0.2rem 0.5rem;
 }

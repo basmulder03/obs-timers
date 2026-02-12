@@ -1,9 +1,11 @@
+import type { CSSProperties } from "react";
 import { useMemo, useState } from "react";
 import { defaultConfig } from "@/core/defaults";
 import type { TimerConfig } from "@/types";
 import { buildOverlayUrl } from "@/core/urlConfig";
 import { deletePreset, listPresets, savePreset } from "@/core/storage";
 import { useDynamicFont } from "@/core/useDynamicFont";
+import { RendererView } from "@/renderers/RendererView";
 import styles from "@/pages/BuilderPage.module.scss";
 
 export function BuilderPage() {
@@ -29,6 +31,13 @@ export function BuilderPage() {
     () => toAppUrl(`/control?cmd=toggle&target=${encodeURIComponent(config.target)}&syncToken=${Date.now()}`),
     [config.target]
   );
+  const previewState = useMemo(() => getPreviewState(config), [config]);
+  const previewThemeClass = config.theme === "amber" ? styles.themeAmber : config.theme === "ice" ? styles.themeIce : "";
+  const previewStyle = {
+    ["--preview-text-color" as string]: config.color,
+    ["--preview-font-family" as string]: `"${fontState.resolvedFamily}", "${config.font}", "Segoe UI", sans-serif`,
+    ["--preview-shadow" as string]: config.shadow ? "0 5px 18px var(--shadow-color)" : "none"
+  } as CSSProperties;
 
   const update = <K extends keyof TimerConfig>(key: K, value: TimerConfig[K]) => {
     setConfig((prev) => ({ ...prev, [key]: value }));
@@ -302,9 +311,38 @@ export function BuilderPage() {
             </button>
           </div>
 
-          <iframe title="preview" src={fullTimerUrl}></iframe>
+          <section className={`${styles.previewCanvas} ${config.bg === "solid" ? styles.previewSolidBg : styles.previewTransparentBg} ${previewThemeClass}`} style={previewStyle}>
+            <div className={styles.previewText} style={{ fontSize: `${Math.max(36, Math.min(config.size, 160))}px` }}>
+              <RendererView
+                renderer={config.renderer}
+                text={previewState.text}
+                progress={previewState.progress}
+                segmentGlow={config.segmentGlow}
+                flipSpeed={config.flipSpeed}
+                flapSpeed={config.flapSpeed}
+                ringThickness={config.ringThickness}
+                ringTicks={config.ringTicks}
+              />
+            </div>
+            <div className={styles.previewLabel}>{previewState.label}</div>
+            {previewState.round ? <div className={styles.previewRound}>{previewState.round}</div> : null}
+            {config.showInfo ? <div className={`${styles.previewInfo} ${styles[config.infoStyle]}`}>{config.infoText || `${previewState.label} | ${config.target}`}</div> : null}
+          </section>
         </section>
       </section>
     </main>
   );
+}
+
+function getPreviewState(config: TimerConfig): { text: string; label: string; round: string; progress: number } {
+  if (config.type === "countdown") {
+    return { text: "24:59", label: "Countdown", round: "", progress: 0.42 };
+  }
+  if (config.type === "countup") {
+    return { text: "01:14:32", label: "Count Up", round: "", progress: 0.54 };
+  }
+  if (config.type === "interval") {
+    return { text: "00:45", label: "Work", round: `Round 1/${config.rounds}`, progress: 0.65 };
+  }
+  return { text: "00:12:08", label: "Stopwatch", round: "", progress: 0.2 };
 }
