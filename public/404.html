@@ -7,12 +7,9 @@
     <script>
       (function () {
         const l = window.location;
-        const path = l.pathname.replace(/^\/obs-timers/, "") || "/";
-        const query = l.search ? l.search.slice(1) : "";
-        const hash = l.hash ? l.hash.slice(1) : "";
         const base = "/obs-timers/";
-        const redirect = `${base}?p=${encodeURIComponent(path)}${query ? `&q=${encodeURIComponent(query)}` : ""}${hash ? `&h=${encodeURIComponent(hash)}` : ""}`;
-        l.replace(redirect);
+        const target = `${l.pathname}${l.search}${l.hash}`;
+        l.replace(`${base}?redirect=${encodeURIComponent(target)}`);
       })();
     </script>
   </head>
