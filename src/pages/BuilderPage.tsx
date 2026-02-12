@@ -13,10 +13,17 @@ export function BuilderPage() {
   const [version, setVersion] = useState(0);
 
   const presets = useMemo(() => listPresets(), [version]);
+  const appBase = useMemo(() => new URL(import.meta.env.BASE_URL, window.location.origin), []);
+
+  const toAppUrl = (path: string) => {
+    const normalized = path.startsWith("/") ? path.slice(1) : path;
+    return new URL(normalized, appBase).toString();
+  };
+
   const timerUrl = useMemo(() => buildOverlayUrl(config), [config]);
-  const fullTimerUrl = useMemo(() => new URL(timerUrl, window.location.origin).toString(), [timerUrl]);
+  const fullTimerUrl = toAppUrl(timerUrl);
   const controlUrl = useMemo(
-    () => new URL(`/control?cmd=toggle&target=${encodeURIComponent(config.target)}&syncToken=${Date.now()}`, window.location.origin).toString(),
+    () => toAppUrl(`/control?cmd=toggle&target=${encodeURIComponent(config.target)}&syncToken=${Date.now()}`),
     [config.target]
   );
 
@@ -263,7 +270,7 @@ export function BuilderPage() {
             </button>
           </div>
 
-          <iframe title="preview" src={timerUrl}></iframe>
+          <iframe title="preview" src={fullTimerUrl}></iframe>
         </section>
       </section>
     </main>
