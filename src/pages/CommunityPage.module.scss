@@ -1,0 +1,69 @@
+.container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 1rem 1.25rem 1.5rem;
+}
+
+.panel,
+.card {
+  background: rgba(14, 22, 40, 0.72);
+  border: 1px solid rgba(177, 208, 255, 0.2);
+  border-radius: 14px;
+  padding: 1rem;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 0.9rem;
+}
+
+.cardWarning {
+  border-color: rgba(255, 193, 125, 0.45);
+  background: rgba(46, 29, 13, 0.45);
+}
+
+.muted {
+  color: rgba(222, 232, 252, 0.72);
+}
+
+.tagRow {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.tag {
+  border-radius: 999px;
+  border: 1px solid rgba(171, 213, 255, 0.45);
+  background: rgba(12, 18, 32, 0.75);
+  padding: 0.1rem 0.5rem;
+  font-size: 0.85rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.button,
+.link {
+  font-size: 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(167, 196, 235, 0.35);
+  background: rgba(12, 18, 32, 0.75);
+  color: var(--text-color);
+  padding: 0.45rem 0.7rem;
+  text-decoration: none;
+}
+
+.previewFrame {
+  width: 100%;
+  min-height: 180px;
+  border-radius: 10px;
+  border: 1px solid rgba(167, 196, 235, 0.35);
+  background: rgba(8, 12, 22, 0.55);
+  margin-top: 0.75rem;
+}

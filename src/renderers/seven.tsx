@@ -1,3 +1,5 @@
+import styles from "@/renderers/Renderers.module.scss";
+
 const MAP: Record<string, string[]> = {
   "0": ["a", "b", "c", "d", "e", "f"],
   "1": ["b", "c"],
@@ -13,31 +15,31 @@ const MAP: Record<string, string[]> = {
 
 export function SevenRenderer({ text, segmentGlow }: { text: string; segmentGlow: boolean }) {
   return (
-    <span className="renderer-seven" data-segment-glow={segmentGlow ? "1" : "0"}>
+    <span className={styles.rendererSeven} data-segment-glow={segmentGlow ? "1" : "0"}>
       {text.split("").map((char, index) => {
         if (char === ":") {
           return (
-            <span key={`c-${index}`} className="seven-colon">
+            <span key={`c-${index}`} className={styles.sevenColon}>
               <i></i>
               <i></i>
             </span>
           );
         }
         if (char === ".") {
-          return <span key={`d-${index}`} className="seven-dot" />;
+          return <span key={`d-${index}`} className={styles.sevenDot} />;
         }
         if (!/[0-9]/.test(char)) {
           return (
-            <span key={`m-${index}`} className="seven-plus">
+            <span key={`m-${index}`} className={styles.sevenMark}>
               {char}
             </span>
           );
         }
         const active = MAP[char] || [];
         return (
-          <span key={`n-${index}`} className="seven-digit">
+          <span key={`n-${index}`} className={styles.sevenDigit}>
             {(["a", "b", "c", "d", "e", "f", "g"] as const).map((part) => (
-              <i key={part} className={`seg ${part}${active.includes(part) ? " on" : ""}`}></i>
+              <i key={part} className={`${styles.seg} ${styles[part]} ${active.includes(part) ? styles.on : ""}`}></i>
             ))}
           </span>
         );

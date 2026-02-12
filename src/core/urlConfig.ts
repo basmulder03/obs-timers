@@ -11,6 +11,7 @@ export function parseConfigFromSearch(timerType: TimerType, search: string): Tim
     autostart: bool(params.get("autostart"), defaultConfig.autostart),
     showMs: bool(params.get("showMs"), defaultConfig.showMs),
     font: str(params.get("font"), defaultConfig.font),
+    fontUrl: str(params.get("fontUrl"), defaultConfig.fontUrl),
     color: parseHexColor(str(params.get("color"), defaultConfig.color), defaultConfig.color),
     bg: enumVal(params.get("bg"), ["transparent", "solid"], defaultConfig.bg),
     size: num(params.get("size"), defaultConfig.size, 36, 260),
@@ -46,6 +47,7 @@ export function buildOverlayUrl(config: TimerConfig): string {
   set(params, "autostart", boolOut(config.autostart));
   set(params, "showMs", boolOut(config.showMs));
   set(params, "font", config.font);
+  set(params, "fontUrl", config.fontUrl);
   set(params, "color", config.color);
   set(params, "bg", config.bg);
   set(params, "size", String(config.size));

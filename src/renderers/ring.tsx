@@ -1,3 +1,5 @@
+import styles from "@/renderers/Renderers.module.scss";
+
 export function RingRenderer({
   text,
   progress,
@@ -15,9 +17,9 @@ export function RingRenderer({
   const offset = circumference * (1 - clamped);
 
   return (
-    <span className="renderer-ring" data-ring-ticks={ticks ? "1" : "0"} style={{ ["--ring-thickness" as string]: `${thickness}px` }}>
-      <svg viewBox="0 0 220 220" className="ring-svg" aria-hidden="true">
-        <g className="ring-ticks">
+    <span className={styles.rendererRing} data-ring-ticks={ticks ? "1" : "0"} style={{ ["--ring-thickness" as string]: `${thickness}px` }}>
+      <svg viewBox="0 0 220 220" className={styles.ringSvg} aria-hidden="true">
+        <g className={styles.ringTicks}>
           {ticks
             ? Array.from({ length: 60 }).map((_, i) => {
                 const angle = (i / 60) * Math.PI * 2;
@@ -32,10 +34,10 @@ export function RingRenderer({
               })
             : null}
         </g>
-        <circle className="ring-track" cx="110" cy="110" r={radius}></circle>
-        <circle className="ring-progress" cx="110" cy="110" r={radius} strokeDasharray={circumference} strokeDashoffset={offset}></circle>
+        <circle className={styles.ringTrack} cx="110" cy="110" r={radius}></circle>
+        <circle className={styles.ringProgress} cx="110" cy="110" r={radius} strokeDasharray={circumference} strokeDashoffset={offset}></circle>
       </svg>
-      <span className="ring-text">{text}</span>
+      <span className={styles.ringText}>{text}</span>
     </span>
   );
 }

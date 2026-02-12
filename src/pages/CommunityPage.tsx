@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { sharedConfigSchema, type SharedConfig } from "@/core/sharedSchema";
+import styles from "@/pages/CommunityPage.module.scss";
 
 interface WarningItem {
   fileName: string;
@@ -9,6 +10,7 @@ interface WarningItem {
 export function CommunityPage() {
   const [items, setItems] = useState<SharedConfig[]>([]);
   const [warnings, setWarnings] = useState<WarningItem[]>([]);
+  const [previewOpen, setPreviewOpen] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     let cancelled = false;
@@ -66,50 +68,56 @@ export function CommunityPage() {
   }, []);
 
   return (
-    <main className="container">
-      <section className="panel" style={{ marginBottom: "0.9rem" }}>
+    <main className={styles.container}>
+      <section className={styles.panel} style={{ marginBottom: "0.9rem" }}>
         <h1>Community</h1>
-        <p className="muted">Shared configurations loaded from separate JSON files.</p>
+        <p className={styles.muted}>Shared configurations loaded from separate JSON files.</p>
       </section>
 
-      <section className="cards">
+      <section className={styles.cards}>
         {warnings.map((warning) => (
-          <article key={`warn-${warning.fileName}`} className="card card-warning">
+          <article key={`warn-${warning.fileName}`} className={`${styles.card} ${styles.cardWarning}`}>
             <h3>Invalid shared entry</h3>
             <p>
               <strong>File:</strong> <code>{warning.fileName}</code>
             </p>
-            <p className="muted">{warning.reason}</p>
+            <p className={styles.muted}>{warning.reason}</p>
           </article>
         ))}
 
         {items.map((item) => (
-          <article key={item.id} className="card">
+          <article key={item.id} className={styles.card}>
             <h3>{item.title}</h3>
-            <p className="muted">{item.description}</p>
+            <p className={styles.muted}>{item.description}</p>
             <p>
               <strong>Type:</strong> {item.timerType}
             </p>
             <p>
               <strong>By:</strong> {item.author}
             </p>
-            <div className="tag-row">
+            <div className={styles.tagRow}>
               {item.tags.map((tag) => (
-                <span className="tag" key={`${item.id}-${tag}`}>
+                <span className={styles.tag} key={`${item.id}-${tag}`}>
                   {tag}
                 </span>
               ))}
             </div>
-            <div className="actions" style={{ marginTop: "0.75rem" }}>
-              <a href={resolveItemUrl(item.url)}>Open Timer URL</a>
+            <div className={styles.actions}>
+              <button className={styles.button} type="button" onClick={() => setPreviewOpen((prev) => ({ ...prev, [item.id]: !prev[item.id] }))}>
+                {previewOpen[item.id] ? "Hide Preview" : "Load Preview"}
+              </button>
+              <a className={styles.link} href={resolveItemUrl(item.url)}>
+                Open Timer URL
+              </a>
             </div>
+            {previewOpen[item.id] ? <iframe title={`${item.title} preview`} className={styles.previewFrame} src={resolveItemUrl(item.url)}></iframe> : null}
           </article>
         ))}
 
         {!items.length && !warnings.length ? (
-          <article className="card">
+          <article className={styles.card}>
             <h3>No shared configs yet</h3>
-            <p className="muted">Open a PR to add one.</p>
+            <p className={styles.muted}>Open a PR to add one.</p>
           </article>
         ) : null}
       </section>

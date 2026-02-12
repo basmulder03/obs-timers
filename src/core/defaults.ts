@@ -6,6 +6,7 @@ export const defaultConfig: TimerConfig = {
   autostart: true,
   showMs: false,
   font: "Barlow Condensed",
+  fontUrl: "",
   color: "#F4F8FF",
   bg: "transparent",
   size: 140,

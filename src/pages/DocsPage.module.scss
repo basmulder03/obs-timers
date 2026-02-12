@@ -1,0 +1,35 @@
+.container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 1rem 1.25rem 1.5rem;
+}
+
+.panel,
+.doc {
+  background: rgba(14, 22, 40, 0.72);
+  border: 1px solid rgba(177, 208, 255, 0.2);
+  border-radius: 14px;
+  padding: 1rem;
+}
+
+.panel {
+  margin-bottom: 0.9rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.doc :global(pre) {
+  overflow: auto;
+  background: rgba(8, 13, 23, 0.75);
+  border: 1px solid rgba(177, 208, 255, 0.2);
+  border-radius: 10px;
+  padding: 0.7rem;
+}
+
+.doc :global(code) {
+  font-family: "Consolas", "Courier New", monospace;
+}

@@ -1,0 +1,14 @@
+.root {
+  width: 100%;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+}
+
+.panel {
+  background: rgba(14, 22, 40, 0.72);
+  border: 1px solid rgba(177, 208, 255, 0.2);
+  border-radius: 14px;
+  padding: 1rem;
+}

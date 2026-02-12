@@ -1,0 +1,71 @@
+.overlayRoot {
+  width: 100%;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+}
+
+.solidBg {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(72, 130, 199, 0.35), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(57, 83, 146, 0.35), transparent 42%),
+    linear-gradient(145deg, #070c17, #0e1525);
+}
+
+.transparentBg {
+  background: transparent;
+}
+
+.overlayShell {
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+}
+
+.timeText {
+  font-size: clamp(56px, 13vw, 220px);
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: var(--text-color);
+}
+
+.timeLabel {
+  font-size: clamp(18px, 2.6vw, 44px);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-color);
+}
+
+.roundLabel {
+  font-size: clamp(14px, 1.9vw, 30px);
+  letter-spacing: 0.12em;
+  color: rgba(214, 228, 255, 0.88);
+}
+
+.overlayInfo {
+  position: fixed;
+  font-size: 18px;
+  text-transform: uppercase;
+  z-index: 30;
+}
+
+.chip {
+  background: rgba(6, 11, 20, 0.62);
+  border: 1px solid rgba(157, 191, 229, 0.35);
+  border-radius: 999px;
+  padding: 0.25rem 0.7rem;
+}
+
+.minimal {
+  color: rgba(237, 245, 255, 0.88);
+}
+
+.tl { top: 14px; left: 16px; }
+.tr { top: 14px; right: 16px; }
+.bl { bottom: 14px; left: 16px; }
+.br { bottom: 14px; right: 16px; }
+
+.themeSteel {}
+.themeAmber { --accent-color: #ffd08f; --text-color: #fff7e7; }
+.themeIce { --accent-color: #9ef3ff; --text-color: #eefcff; }

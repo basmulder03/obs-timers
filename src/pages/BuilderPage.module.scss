@@ -1,0 +1,101 @@
+.container {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 1rem 1.25rem 1.5rem;
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: minmax(300px, 460px) 1fr;
+  gap: 1rem;
+}
+
+.panel {
+  background: rgba(14, 22, 40, 0.72);
+  border: 1px solid rgba(177, 208, 255, 0.2);
+  border-radius: 14px;
+  padding: 1rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 0.75rem;
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.control {
+  font-size: 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(167, 196, 235, 0.35);
+  background: rgba(12, 18, 32, 0.75);
+  color: var(--text-color);
+  padding: 0.55rem 0.7rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.button {
+  @extend .control;
+  cursor: pointer;
+}
+
+.primary {
+  background: linear-gradient(135deg, #2e7ecf, #2460a8);
+}
+
+.muted {
+  color: rgba(222, 232, 252, 0.72);
+}
+
+.preview iframe {
+  width: 100%;
+  min-height: 360px;
+  border-radius: 12px;
+  border: 1px solid rgba(167, 196, 235, 0.35);
+}
+
+.fontStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.statusDot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+}
+
+.statusIdle {
+  background: rgba(170, 198, 232, 0.6);
+}
+
+.statusLoading {
+  background: #f1c96f;
+}
+
+.statusLoaded {
+  background: #72d49a;
+}
+
+.statusError {
+  background: #ef7d86;
+}
+
+@media (max-width: 960px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+}

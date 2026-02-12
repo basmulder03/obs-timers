@@ -3,6 +3,8 @@ import { defaultConfig } from "@/core/defaults";
 import type { TimerConfig } from "@/types";
 import { buildOverlayUrl } from "@/core/urlConfig";
 import { deletePreset, listPresets, savePreset } from "@/core/storage";
+import { useDynamicFont } from "@/core/useDynamicFont";
+import styles from "@/pages/BuilderPage.module.scss";
 
 export function BuilderPage() {
   const [config, setConfig] = useState<TimerConfig>(defaultConfig);
@@ -14,6 +16,7 @@ export function BuilderPage() {
 
   const presets = useMemo(() => listPresets(), [version]);
   const appBase = useMemo(() => new URL(import.meta.env.BASE_URL, window.location.origin), []);
+  const fontState = useDynamicFont(config.font, config.fontUrl);
 
   const toAppUrl = (path: string) => {
     const normalized = path.startsWith("/") ? path.slice(1) : path;
@@ -143,32 +146,32 @@ export function BuilderPage() {
   };
 
   return (
-    <main className="container">
-      <section className="dashboard">
-        <section className="panel">
+    <main className={styles.container}>
+      <section className={styles.dashboard}>
+        <section className={styles.panel}>
           <h1>Builder</h1>
-          <p className="muted">Build URLs, import/export JSON, and manage presets.</p>
+          <p className={styles.muted}>Build URLs, import/export JSON, and manage presets.</p>
 
-          <div className="field-row">
-            <label className="field">
+          <div className={styles.fieldRow}>
+            <label className={styles.field}>
               Type
-              <select value={config.type} onChange={(e) => update("type", e.target.value as TimerConfig["type"])}>
+              <select className={styles.control} value={config.type} onChange={(e) => update("type", e.target.value as TimerConfig["type"])}>
                 <option value="countdown">Countdown</option>
                 <option value="stopwatch">Stopwatch</option>
                 <option value="countup">Count Up</option>
                 <option value="interval">Interval</option>
               </select>
             </label>
-            <label className="field">
+            <label className={styles.field}>
               Target
-              <input value={config.target} onChange={(e) => update("target", e.target.value)} />
+              <input className={styles.control} value={config.target} onChange={(e) => update("target", e.target.value)} />
             </label>
           </div>
 
-          <div className="field-row">
-            <label className="field">
+          <div className={styles.fieldRow}>
+            <label className={styles.field}>
               Renderer
-              <select value={config.renderer} onChange={(e) => update("renderer", e.target.value as TimerConfig["renderer"])}>
+              <select className={styles.control} value={config.renderer} onChange={(e) => update("renderer", e.target.value as TimerConfig["renderer"])}>
                 <option value="classic">Classic</option>
                 <option value="seven">Seven Segment</option>
                 <option value="flip">Flip Cards</option>
@@ -176,35 +179,64 @@ export function BuilderPage() {
                 <option value="splitflap">Split-Flap</option>
               </select>
             </label>
-            <label className="field">
+            <label className={styles.field}>
               Show info strip
-              <select value={config.showInfo ? "1" : "0"} onChange={(e) => update("showInfo", e.target.value === "1")}>
+              <select className={styles.control} value={config.showInfo ? "1" : "0"} onChange={(e) => update("showInfo", e.target.value === "1")}>
                 <option value="0">Off</option>
                 <option value="1">On</option>
               </select>
             </label>
           </div>
 
-          <div className="field-row">
-            <label className="field">
-              Info text
-              <input value={config.infoText} onChange={(e) => update("infoText", e.target.value)} />
+          <div className={styles.fieldRow}>
+            <label className={styles.field}>
+              Font family
+              <input className={styles.control} value={config.font} onChange={(e) => update("font", e.target.value)} placeholder="Barlow Condensed" />
             </label>
-            <label className="field">
+            <label className={styles.field}>
+              Font URL (optional)
+              <input className={styles.control} value={config.fontUrl} onChange={(e) => update("fontUrl", e.target.value)} placeholder="https://.../font.css or .woff2" />
+            </label>
+          </div>
+
+          <div className={styles.fontStatus}>
+            <span
+              className={`${styles.statusDot} ${
+                fontState.status === "loaded"
+                  ? styles.statusLoaded
+                  : fontState.status === "loading"
+                    ? styles.statusLoading
+                    : fontState.status === "error"
+                      ? styles.statusError
+                      : styles.statusIdle
+              }`}
+            ></span>
+            <span>
+              Font status: {fontState.status}
+              {fontState.message ? ` - ${fontState.message}` : ""}
+            </span>
+          </div>
+
+          <div className={styles.fieldRow}>
+            <label className={styles.field}>
+              Info text
+              <input className={styles.control} value={config.infoText} onChange={(e) => update("infoText", e.target.value)} />
+            </label>
+            <label className={styles.field}>
               Duration (countdown)
-              <input type="number" value={config.duration} onChange={(e) => update("duration", Number(e.target.value))} />
+              <input className={styles.control} type="number" value={config.duration} onChange={(e) => update("duration", Number(e.target.value))} />
             </label>
           </div>
 
           <h3>Presets</h3>
-          <div className="field-row">
-            <label className="field">
+          <div className={styles.fieldRow}>
+            <label className={styles.field}>
               Preset name
-              <input value={presetName} onChange={(e) => setPresetName(e.target.value)} />
+              <input className={styles.control} value={presetName} onChange={(e) => setPresetName(e.target.value)} />
             </label>
-            <label className="field">
+            <label className={styles.field}>
               Saved presets
-              <select value={selectedPreset} onChange={(e) => setSelectedPreset(e.target.value)}>
+              <select className={styles.control} value={selectedPreset} onChange={(e) => setSelectedPreset(e.target.value)}>
                 <option value="">Select preset</option>
                 {presets.map((preset) => (
                   <option key={preset.name} value={preset.name}>
@@ -214,58 +246,58 @@ export function BuilderPage() {
               </select>
             </label>
           </div>
-          <div className="actions">
-            <button className="primary" type="button" onClick={save}>
+          <div className={styles.actions}>
+            <button className={`${styles.button} ${styles.primary}`} type="button" onClick={save}>
               Save preset
             </button>
-            <button type="button" onClick={load}>
+            <button className={styles.button} type="button" onClick={load}>
               Load preset
             </button>
-            <button type="button" onClick={remove}>
+            <button className={styles.button} type="button" onClick={remove}>
               Delete preset
             </button>
           </div>
 
           <h3>Import / Export</h3>
-          <label className="field">
+          <label className={styles.field}>
             JSON or overlay URL
-            <textarea value={jsonInput} onChange={(e) => setJsonInput(e.target.value)} rows={7}></textarea>
+            <textarea className={styles.control} value={jsonInput} onChange={(e) => setJsonInput(e.target.value)} rows={7}></textarea>
           </label>
-          <div className="actions">
-            <button type="button" onClick={exportJson}>
+          <div className={styles.actions}>
+            <button className={styles.button} type="button" onClick={exportJson}>
               Export JSON
             </button>
-            <button type="button" onClick={copyJson}>
+            <button className={styles.button} type="button" onClick={copyJson}>
               Copy JSON
             </button>
-            <button className="primary" type="button" onClick={importAny}>
+            <button className={`${styles.button} ${styles.primary}`} type="button" onClick={importAny}>
               Import
             </button>
-            <button type="button" onClick={() => copy(JSON.stringify(shareTemplate, null, 2), "Copied share template.")}>
+            <button className={styles.button} type="button" onClick={() => copy(JSON.stringify(shareTemplate, null, 2), "Copied share template.")}>
               Copy Share Template
             </button>
           </div>
 
-          <p className="muted">{message}</p>
+          <p className={styles.muted}>{message}</p>
         </section>
 
-        <section className="panel preview">
+        <section className={`${styles.panel} ${styles.preview}`}>
           <h2>Generated URLs</h2>
-          <label className="field">
+          <label className={styles.field}>
             Overlay URL
-            <textarea readOnly value={fullTimerUrl}></textarea>
+            <textarea className={styles.control} readOnly value={fullTimerUrl}></textarea>
           </label>
-          <div className="actions">
-            <button className="primary" type="button" onClick={() => copy(fullTimerUrl)}>
+          <div className={styles.actions}>
+            <button className={`${styles.button} ${styles.primary}`} type="button" onClick={() => copy(fullTimerUrl)}>
               Copy Overlay URL
             </button>
           </div>
-          <label className="field">
+          <label className={styles.field}>
             Control URL
-            <textarea readOnly value={controlUrl}></textarea>
+            <textarea className={styles.control} readOnly value={controlUrl}></textarea>
           </label>
-          <div className="actions">
-            <button type="button" onClick={() => copy(controlUrl)}>
+          <div className={styles.actions}>
+            <button className={styles.button} type="button" onClick={() => copy(controlUrl)}>
               Copy Control URL
             </button>
           </div>

@@ -9,6 +9,7 @@ export interface TimerConfig {
   autostart: boolean;
   showMs: boolean;
   font: string;
+  fontUrl: string;
   color: string;
   bg: "transparent" | "solid";
   size: number;

@@ -1,0 +1,33 @@
+@use "./tokens";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+  font-family: var(--font-family);
+}
+
+body {
+  color: var(--text-color);
+  background:
+    radial-gradient(circle at 20% 20%, rgba(72, 130, 199, 0.35), transparent 45%),
+    radial-gradient(circle at 80% 0%, rgba(57, 83, 146, 0.35), transparent 42%),
+    linear-gradient(145deg, #070c17, #0e1525);
+}
+
+a {
+  color: var(--text-color);
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}

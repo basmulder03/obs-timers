@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { marked } from "marked";
 import { Link, useParams } from "react-router-dom";
+import styles from "@/pages/DocsPage.module.scss";
 
 const modules = import.meta.glob("../../docs-src/*.md", { eager: true, query: "?raw", import: "default" }) as Record<string, string>;
 
@@ -19,10 +20,10 @@ export function DocsPage() {
   const html = useMemo(() => marked.parse(current?.raw ?? "# No docs"), [current]);
 
   return (
-    <main className="container">
-      <section className="panel" style={{ marginBottom: "0.9rem" }}>
+    <main className={styles.container}>
+      <section className={styles.panel}>
         <h1>Docs</h1>
-        <div className="actions">
+        <div className={styles.actions}>
           {docs.map((doc) => (
             <Link key={doc.slug} to={`/docs/${doc.slug}`}>
               {doc.title}
@@ -31,7 +32,7 @@ export function DocsPage() {
         </div>
       </section>
 
-      <article className="doc" dangerouslySetInnerHTML={{ __html: String(html) }}></article>
+      <article className={styles.doc} dangerouslySetInnerHTML={{ __html: String(html) }}></article>
     </main>
   );
 }

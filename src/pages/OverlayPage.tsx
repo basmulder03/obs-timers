@@ -9,6 +9,7 @@ import { parseConfigFromSearch } from "@/core/urlConfig";
 import { defaultConfig } from "@/core/defaults";
 import { listenCommands } from "@/core/storage";
 import type { TimerType } from "@/types";
+import styles from "@/pages/OverlayPage.module.scss";
 
 const timerTypes: TimerType[] = ["countdown", "stopwatch", "countup", "interval"];
 
@@ -149,7 +150,7 @@ export function OverlayPage() {
 
   return (
     <OverlayShell config={config}>
-      <div className="time-text" style={{ fontSize: `${config.size}px`, textShadow: config.shadow ? "0 5px 18px var(--shadow-color)" : "none" }}>
+      <div className={styles.timeText} style={{ fontSize: `${config.size}px`, textShadow: config.shadow ? "0 5px 18px var(--shadow-color)" : "none" }}>
         <RendererView
           renderer={config.renderer}
           text={text}
@@ -161,9 +162,9 @@ export function OverlayPage() {
           ringTicks={config.ringTicks}
         />
       </div>
-      <div className="time-label">{label}</div>
-      {config.type === "interval" ? <div className="round-label">{round}</div> : null}
-      <InfoStrip config={config} fallback={infoFallback} />
+      <div className={styles.timeLabel}>{label}</div>
+      {config.type === "interval" ? <div className={styles.roundLabel}>{round}</div> : null}
+      <InfoStrip config={config} fallback={infoFallback} styles={styles} />
     </OverlayShell>
   );
 }

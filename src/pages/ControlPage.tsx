@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { publishCommand } from "@/core/storage";
+import styles from "@/pages/ControlPage.module.scss";
 
 export function ControlPage() {
   const [search] = useSearchParams();
@@ -17,8 +18,8 @@ export function ControlPage() {
   }, [search]);
 
   return (
-    <main className="overlay-root">
-      <section className="panel">
+    <main className={styles.root}>
+      <section className={styles.panel}>
         <h1>Control Bridge</h1>
         <p>{message}</p>
       </section>
